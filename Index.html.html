@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Garba Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff9933, #ff6b6b, #4ecdc4);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        header {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .message {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        
+        .dance-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .character-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+        
+        .character {
+            width: 250px;
+            height: 350px;
+            background: url('https://img.freepik.com/free-vector/indian-woman-dancing_1196-451.jpg?semt=ais_hybrid&w=740&q=80') center/contain no-repeat;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .dance-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dance-btn:hover {
+            background: #ff5252;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .dance-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            max-width: 600px;
+        }
+        
+        .instructions h2 {
+            margin-bottom: 15px;
+        }
+        
+        .instructions p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .counter {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 15s infinite linear;
+        }
+        
+        .decoration:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            width: 80px;
+            height: 80px;
+            animation-duration: 20s;
+            background: linear-gradient(45deg, #ff6b6b, #ff9933);
+        }
+        
+        .decoration:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            width: 120px;
+            height: 120px;
+            animation-duration: 25s;
+            background: linear-gradient(45deg, #4ecdc4, #45b7aa);
+        }
+        
+        .decoration:nth-child(3) {
+            bottom: 15%;
+            left: 15%;
+            width: 60px;
+            height: 60px;
+            animation-duration: 18s;
+            background: linear-gradient(45deg, #ff9933, #ff6b6b);
+        }
+        
+        .decoration:nth-child(4) {
+            bottom: 10%;
+            right: 5%;
+            width: 90px;
+            height: 90px;
+            animation-duration: 22s;
+            background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-30px) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translateY(-50px) rotate(180deg) scale(1.2);
+            }
+            75% {
+                transform: translateY(-30px) rotate(270deg) scale(1.1);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg) scale(1);
+            }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: gold;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+        
+        footer {
+            margin-top: 30px;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .dance-floor {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, 
+                #ff6b6b, #ff9933, #4ecdc4, #ff9933, #ff6b6b);
+            background-size: 200% 100%;
+            animation: floorGlow 3s infinite linear;
+        }
+        
+        @keyframes floorGlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .character-container {
+                width: 250px;
+                height: 350px;
+            }
+            
+            .character {
+                width: 200px;
+                height: 280px;
+            }
+            
+            .dance-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration"></div>
+    <div class="decoration"></div>
+    <div class="decoration"></div>
+    <div class="decoration"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Virtual Garba Experience</h1>
+            <p class="subtitle">Click to dance and feel the festive spirit!</p>
+        </header>
+        
+        <div class="message">
+            DANCE DANCE OMGGG
+        </div>
+        
+        <div class="dance-area">
+            <div class="character-container">
+                <div class="character" id="dancer"></div>
+                <div class="dance-floor"></div>
+            </div>
+            
+            <div class="counter">
+                Garba Moves: <span id="moveCount">0</span>
+            </div>
+            
+            <div class="controls">
+                <button class="dance-btn" id="basicMove">Basic Garba Step</button>
+                <button class="dance-btn" id="circleMove">Circle Garba</button>
+                <button class="dance-btn" id="clapMove">Clap & Twirl</button>
+                <button class="dance-btn" id="fastMove">Fast Garba</button>
+                <button class="dance-btn" id="specialMove">Special Move!</button>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2>How to Use</h2>
+            <p>Click any of the dance buttons to make the dancer perform Garba moves.</p>
+            <p>Each click performs one round of the selected Garba style.</p>
+            <p>Try different moves and see how many you can collect!</p>
+        </div>
+        
+        <footer>
+             DANCE DANCE OMG | Virtual Garba 2025
+        </footer>
+    </div>
+
+    <script>
+        // Get elements
+        const dancer = document.getElementById('dancer');
+        const moveCountElement = document.getElementById('moveCount');
+        const basicMoveBtn = document.getElementById('basicMove');
+        const circleMoveBtn = document.getElementById('circleMove');
+        const clapMoveBtn = document.getElementById('clapMove');
+        const fastMoveBtn = document.getElementById('fastMove');
+        const specialMoveBtn = document.getElementById('specialMove');
+        
+        let moveCount = 0;
+        
+        // Enhanced dance move functions
+        function basicMove() {
+            dancer.style.transform = 'translateX(-20px) rotate(-8deg) scale(1.05)';
+            setTimeout(() => {
+                dancer.style.transform = 'translateX(20px) rotate(8deg) scale(1.1)';
+            }, 200);
+            setTimeout(() => {
+                dancer.style.transform = 'translateX(-15px) rotate(-5deg) scale(1.05)';
+            }, 400);
+            setTimeout(() => {
+                dancer.style.transform = 'translateX(15px) rotate(5deg) scale(1.1)';
+            }, 600);
+            setTimeout(() => {
+                dancer.style.transform = 'translateX(0) rotate(0) scale(1)';
+            }, 800);
+            
+            createSparkles(10);
+            updateCounter();
+        }
+        
+        function circleMove() {
+            dancer.style.transform = 'scale(0.85) rotate(-15deg) translateY(-10px)';
+            setTimeout(() => {
+                dancer.style.transform = 'scale(1.15) rotate(15deg) translateY(5px)';
+            }, 300);
+            setTimeout(() => {
+                dancer.style.transform = 'scale(0.9) rotate(-25deg) translateY(-5px)';
+            }, 600);
+            setTimeout(() => {
+                dancer.style.transform = 'scale(1.1) rotate(25deg) translateY(10px)';
+            }, 900);
+            setTimeout(() => {
+                dancer.style.transform = 'scale(1) rotate(0) translateY(0)';
+            }, 1200);
+            
+            createSparkles(15);
+            updateCounter();
+        }
+        
+        function clapMove() {
+            dancer.style.transform = 'translateY(-30px) scale(1.2) rotate(5deg)';
+            setTimeout(() => {
+                dancer.style.transform = 'translateY(10px) scale(0.9) rotate(-5deg)';
+            }, 200);
+            setTimeout(() => {
+                dancer.style.transform = 'translateY(-20px) scale(1.15) rotate(3deg)';
+            }, 400);
+            setTimeout(() => {
+                dancer.style.transform = 'translateY(5px) scale(0.95) rotate(-3deg)';
+            }, 600);
+            setTimeout(() => {
+                dancer.style.transform = 'translateY(0) scale(1) rotate(0)';
+            }, 800);
+            
+            createSparkles(20);
+            updateCounter();
+        }
+        
+        function fastMove() {
+            const moves = [
+                'translateX(-25px) scale(0.9) rotate(-12deg)',
+                'translateX(25px) scale(1.15) rotate(12deg)',
+                'translateX(-20px) scale(0.95) rotate(-8deg)',
+                'translateX(20px) scale(1.1) rotate(8deg)',
+                'translateX(-15px) scale(0.98) rotate(-4deg)',
+                'translateX(15px) scale(1.05) rotate(4deg)',
+                'translateX(0) scale(1) rotate(0)'
+            ];
+            
+            moves.forEach((move, index) => {
+                setTimeout(() => {
+                    dancer.style.transform = move;
+                    if (index % 2 === 0) createSparkles(5);
+                }, index * 100);
+            });
+            
+            updateCounter();
+        }
+        
+        function specialMove() {
+            // Complex special move with multiple transformations
+            const specialMoves = [
+                'translateY(-40px) scale(1.3) rotate(-20deg)',
+                'translateY(20px) scale(0.8) rotate(30deg) translateX(30px)',
+                'translateY(-30px) scale(1.25) rotate(-15deg) translateX(-30px)',
+                'translateY(15px) scale(0.85) rotate(25deg) translateX(25px)',
+                'translateY(-20px) scale(1.2) rotate(-10deg) translateX(-20px)',
+                'translateY(10px) scale(0.9) rotate(15deg) translateX(15px)',
+                'translateY(0) scale(1) rotate(0) translateX(0)'
+            ];
+            
+            specialMoves.forEach((move, index) => {
+                setTimeout(() => {
+                    dancer.style.transform = move;
+                    createSparkles(8);
+                    if (index === 2 || index === 4) createConfetti();
+                }, index * 200);
+            });
+            
+            updateCounter();
+        }
+        
+        function updateCounter() {
+            moveCount++;
+            moveCountElement.textContent = moveCount;
+            
+            // Add confetti effect occasionally
+            if (moveCount % 3 === 0) {
+                createConfetti();
+            }
+            
+            // Special celebration every 10 moves
+            if (moveCount % 10 === 0) {
+                celebrate();
+            }
+        }
+        
+        function createSparkles(count) {
+            for (let i = 0; i < count; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 300 + 'px';
+                sparkle.style.top = Math.random() * 400 + 'px';
+                sparkle.style.animation = `sparkleAnim ${0.5 + Math.random() * 1}s ease-out`;
+                document.querySelector('.character-container').appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 1500);
+            }
+        }
+        
+        // Add CSS for sparkle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes sparkleAnim {
+                0% { opacity: 0; transform: scale(0) rotate(0deg); }
+                50% { opacity: 1; transform: scale(1.5) rotate(180deg); }
+                100% { opacity: 0; transform: scale(0) rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Enhanced confetti effect
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#ff9933', '#ffe66d', '#6a0572', '#ffd166'];
+            const shapes = ['circle', 'square', 'triangle'];
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                confetti.style.position = 'fixed';
+                confetti.style.width = '15px';
+                confetti.style.height = '15px';
+                confetti.style.backgroundColor = color;
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-20px';
+                confetti.style.zIndex = '9999';
+                confetti.style.opacity = '0.9';
+                
+                if (shape === 'circle') {
+                    confetti.style.borderRadius = '50%';
+                } else if (shape === 'triangle') {
+                    confetti.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+                    confetti.style.backgroundColor = 'transparent';
+                    confetti.style.background = `conic-gradient(from 0deg, ${color}, ${color})`;
+                }
+                
+                document.body.appendChild(confetti);
+                
+                // Animation
+                const animation = confetti.animate([
+                    { 
+                        transform: 'translateY(0) rotate(0deg) scale(1)', 
+                        opacity: 1 
+                    },
+                    { 
+                        transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 720}deg) scale(0.5)`, 
+                        opacity: 0 
+                    }
+                ], {
+                    duration: 2000 + Math.random() * 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    document.body.removeChild(confetti);
+                };
+            }
+        }
+        
+        function celebrate() {
+            // Big celebration with multiple effects
+            createConfetti();
+            createConfetti();
+            createSparkles(50);
+            
+            // Pulse the counter
+            moveCountElement.style.animation = 'none';
+            setTimeout(() => {
+                moveCountElement.style.animation = 'pulse 0.5s ease-in-out 3';
+            }, 10);
+            
+            // Flash background
+            document.body.style.background = 'linear-gradient(135deg, #ff0000, #ffff00, #00ff00)';
+            setTimeout(() => {
+                document.body.style.background = 'linear-gradient(135deg, #ff9933, #ff6b6b, #4ecdc4)';
+            }, 500);
+        }
+        
+        // Add event listeners
+        basicMoveBtn.addEventListener('click', basicMove);
+        circleMoveBtn.addEventListener('click', circleMove);
+        clapMoveBtn.addEventListener('click', clapMove);
+        fastMoveBtn.addEventListener('click', fastMove);
+        specialMoveBtn.addEventListener('click', specialMove);
+        
+        // Auto dance occasionally with random moves
+        setInterval(() => {
+            if (Math.random() > 0.6) {
+                const moves = [basicMove, circleMove, clapMove, fastMove, specialMove];
+                moves[Math.floor(Math.random() * moves.length)]();
+            }
+        }, 4000);
+        
+        // Background color subtle animation
+        setInterval(() => {
+            const hue = Math.sin(Date.now() / 10000) * 30;
+            document.body.style.background = `linear-gradient(135deg, 
+                hsl(${30 + hue}, 100%, 60%), 
+                hsl(${0 + hue}, 100%, 65%), 
+                hsl(${180 + hue}, 100%, 60%))`;
+        }, 100);
+    </script>
+</body>
+</html>
